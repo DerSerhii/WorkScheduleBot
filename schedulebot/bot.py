@@ -1,15 +1,21 @@
 import logging
+
 from aiogram import Bot, Dispatcher, executor
 
-from settings import TELEGRAM_TOKEN
-from schedulebot import handlers
+from schedulebot import config, handlers
 
 
 logging.basicConfig(level=logging.INFO)
 
+if not config.TELEGRAM_TOKEN:
+    raise ValueError(
+        'The Telegram API Token must be initialized in the package'
+        f' <{config.BASE_DIR}> in file <.env> as TELEGRAM_TOKEN=...'
+    )
+
 
 def main() -> None:
-    bot = Bot(token=TELEGRAM_TOKEN)
+    bot = Bot(token=config.TELEGRAM_TOKEN)
     dp = Dispatcher(bot)
 
     handlers.register_start(dp)
