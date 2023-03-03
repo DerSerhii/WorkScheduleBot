@@ -1,7 +1,6 @@
-from aiogram import types
+from aiogram import types, Dispatcher
 
 import schedulebot.message as msg
+import schedulebot.handlers.keyboards as kb
 
 
-async def superuser(message: types.Message):
-    await message.answer(msg.SUPERUSER)
