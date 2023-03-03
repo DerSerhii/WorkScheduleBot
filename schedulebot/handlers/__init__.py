@@ -1,6 +1,5 @@
-from .start import start
-from .client import client
-from .moderator import moderator
-from .superuser import superuser
+from .start import register_start
+from .client import register_client
+from .admin import register_admin
 
-__all__ = ['start', 'client', 'moderator', 'superuser']
+__all__ = ['register_start', 'register_admin', 'register_client']
