@@ -37,7 +37,7 @@ async def create_db():
         INSERT INTO users (tg_id, name, role_id) VALUES (
             ($1), 
             ($2), 
-            (select id from roles where role=($3))
+            (SELECT id FROM roles WHERE role=($3))
         );
         """, SUPERUSER_ID, superuser, superuser
     )
