@@ -1,3 +1,4 @@
+import logging
 import os
 from pathlib import Path
 from enum import Enum
@@ -23,6 +24,15 @@ DB_CONNECT = {
     'user': DB_USER,
     'password': DB_PASSWORD,
     'host': DB_HOST
+}
+
+# Settings Logging
+LOG_CONFIG = {
+    'format': u'%(filename) -17s'
+              u'[LINE:%(lineno)d]'
+              u'\t#%(levelname) -10s'
+              u'[%(asctime)s] \t%(message)s',
+    'level': logging.INFO
 }
 
 
