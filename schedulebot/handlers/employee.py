@@ -13,7 +13,7 @@ async def client_confirm(call: types.CallbackQuery):
     )
 
 
-def register_client(dp: Dispatcher):
+def register_employee(dp: Dispatcher):
     dp.register_callback_query_handler(
         client_confirm,
         kb.cb_start.filter(role='employee')

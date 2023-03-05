@@ -3,13 +3,10 @@ import logging
 
 import asyncpg
 
-from schedulebot.config import DB_CONNECT, SUPERUSER_ID, Role
+from schedulebot.config import DB_CONNECT, SUPERUSER_ID, LOG_CONFIG, Role
 
 
-logging.basicConfig(
-    format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s] %(message)s',
-    level=logging.INFO
-)
+logging.basicConfig(**LOG_CONFIG)
 
 
 async def create_db():
@@ -45,10 +42,11 @@ async def create_db():
     await con.execute(*cmd_init_superuser)
 
     await con.close()
-    logging.info("The start tables have been created")
+    logging.info("The database and start tables have been created!")
 
 
 async def create_pool():
+    logging.info('Database connection pool created')
     return await asyncpg.create_pool(**DB_CONNECT)
 
 
