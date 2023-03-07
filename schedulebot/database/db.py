@@ -45,7 +45,7 @@ async def create_db():
     logging.info("The database and start tables have been created!")
 
 
-async def create_pool():
+async def create_pool() -> asyncpg.pool.Pool:
     logging.info('Database connection pool created')
     return await asyncpg.create_pool(**DB_CONNECT)
 
