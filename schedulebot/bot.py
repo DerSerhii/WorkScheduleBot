@@ -19,7 +19,6 @@ if not TELEGRAM_TOKEN:
 
 async def on_startup(dp: Dispatcher):
     pool = await database.create_pool()
-
     middlewares.setup(dp, pool)
     filters.setup(dp)
     handlers.setup(dp)

@@ -6,11 +6,10 @@ import asyncpg
 from schedulebot.config import DB_CONNECT, SUPERUSER_ID, LOG_CONFIG, Role
 
 
-logging.basicConfig(**LOG_CONFIG)
-
-
 async def create_db():
+    logging.basicConfig(**LOG_CONFIG)
     logging.info('Creating databases...')
+
     con: asyncpg.Connection = await asyncpg.connect(**DB_CONNECT)
 
     cmd_create_db = open('db.sql', 'r').read()
@@ -32,8 +31,8 @@ async def create_db():
     cmd_init_superuser = (
         f"""
         INSERT INTO users (tg_id, name, role_id) VALUES (
-            ($1), 
-            ($2), 
+            ($1),
+            ($2),
             (SELECT id FROM roles WHERE role=($3))
         );
         """, SUPERUSER_ID, superuser, superuser

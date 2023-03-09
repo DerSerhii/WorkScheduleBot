@@ -2,6 +2,7 @@ from aiogram import types, Dispatcher
 
 import schedulebot.messages as msg
 import schedulebot.handlers.keyboards as kb
+from ..config import Role
 from ..filters.test_filter import TestFilter
 
 
@@ -25,7 +26,7 @@ async def test(message: types.Message, middleware, from_filter):
 
 def register_start(dp: Dispatcher):
     dp.register_message_handler(start,
-                                TestFilter(),
+                                role=Role.SUPERUSER,
                                 commands=['start'])
     dp.register_message_handler(test,
                                 TestFilter(),
