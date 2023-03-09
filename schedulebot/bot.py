@@ -2,7 +2,7 @@ import logging
 
 from aiogram import Bot, Dispatcher, executor
 
-from schedulebot import handlers, database
+from schedulebot import handlers, database, middlewares, filters
 from schedulebot.config import TELEGRAM_TOKEN, BASE_DIR, LOG_CONFIG
 
 
@@ -19,10 +19,9 @@ if not TELEGRAM_TOKEN:
 
 async def on_startup(dp: Dispatcher):
     pool = await database.create_pool()
-
-    handlers.register_start(dp)
-    handlers.register_employee(dp)
-    handlers.register_admin(dp)
+    middlewares.setup(dp, pool)
+    filters.setup(dp)
+    handlers.setup(dp)
 
 
 async def on_shutdown(dp: Dispatcher):
