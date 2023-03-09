@@ -1,4 +1,3 @@
-import logging
 import typing
 
 from aiogram.dispatcher.filters import BoundFilter
@@ -29,15 +28,15 @@ class RoleFilter(BoundFilter):
         return data.get("role") in self.roles
 
 
-class AdminFilter(BoundFilter):
-    key = 'is_admin'
+class SuperuserFilter(BoundFilter):
+    key = 'is_superuser'
 
-    def __init__(self, is_admin: typing.Optional[bool] = None):
-        self.is_admin = is_admin
+    def __init__(self, is_superuser: typing.Optional[bool] = None):
+        self.is_superuser = is_superuser
 
     async def check(self, obj: TelegramObject):
-        if self.is_admin is None:
+        if self.is_superuser is None:
             return True
         data = ctx_data.get()
 
-        return (data.get("role") is Role.SUPERUSER) == self.is_admin
+        return (data.get("role") is Role.SUPERUSER) == self.is_superuser

@@ -26,7 +26,6 @@ async def test(message: types.Message, middleware, from_filter):
 
 def register_start(dp: Dispatcher):
     dp.register_message_handler(start,
-                                role=Role.SUPERUSER,
                                 commands=['start'])
     dp.register_message_handler(test,
                                 TestFilter(),
