@@ -21,10 +21,12 @@ class RoleMiddleware(LifetimeControllerMiddleware):
             WHERE tg_id=($1);
         '''
 
-        logging.info(obj)
         user_id = obj['from']['id']
-        role_str = await db.fetchval(get_role_sql, user_id)
-        data['role'] = Role(role_str)
+        if role_str := await db.fetchval(get_role_sql, user_id):
+            role = Role(role_str)
+        else:
+            role = None
+        data['role'] = role
 
     async def post_process(self, obj: TelegramObject, data: dict, *args):
         del data['role']

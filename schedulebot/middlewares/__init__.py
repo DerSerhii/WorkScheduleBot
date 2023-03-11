@@ -18,4 +18,4 @@ def setup(dp: Dispatcher, pool: asyncpg.pool.Pool, config: dict = None):
     dp.setup_middleware(DatabaseMiddleware(pool))
     dp.setup_middleware(RoleMiddleware())
     # dp.setup_middleware(DataMiddleware())
-    dp.setup_middleware(TestMiddleware())
+    # dp.setup_middleware(TestMiddleware())
