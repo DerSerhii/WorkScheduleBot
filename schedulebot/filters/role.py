@@ -1,4 +1,4 @@
-import typing
+from typing import Optional, Union, Collection
 
 from aiogram.dispatcher.filters import BoundFilter
 from aiogram.dispatcher.handler import ctx_data
@@ -12,7 +12,7 @@ class RoleFilter(BoundFilter):
 
     def __init__(
             self,
-            role: typing.Union[None, Role, typing.Collection[Role]] = None,
+            role: Union[None, Role, Collection[Role]] = None,
     ):
         if role is None:
             self.roles = None
@@ -31,7 +31,7 @@ class RoleFilter(BoundFilter):
 class SuperuserFilter(BoundFilter):
     key = 'is_superuser'
 
-    def __init__(self, is_superuser: typing.Optional[bool] = None):
+    def __init__(self, is_superuser: Optional[bool] = None):
         self.is_superuser = is_superuser
 
     async def check(self, obj: TelegramObject):

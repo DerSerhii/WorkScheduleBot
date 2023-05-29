@@ -5,7 +5,11 @@ from enum import Enum
 
 from dotenv import load_dotenv
 
+from . import messages as bot_msg
 
+
+# Loads environment variables from a file <.env>
+# file in the root folder
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -26,6 +30,14 @@ DB_CONNECT = {
     'host': DB_HOST
 }
 
+
+# Settings role
+class Role(Enum):
+    SUPERUSER = bot_msg.SUPERUSER
+    ADMIN = bot_msg.ADMIN
+    EMPLOYEE = bot_msg.EMPLOYEE
+
+
 # Settings Logging
 LOG_CONFIG = {
     'format': u'%(filename) -17s'
@@ -34,9 +46,3 @@ LOG_CONFIG = {
               u'[%(asctime)s] \t%(message)s',
     'level': logging.INFO
 }
-
-
-class Role(Enum):
-    SUPERUSER = 'superuser'
-    ADMIN = 'admin'
-    EMPLOYEE = 'employee'
