@@ -1,4 +1,9 @@
+.env
 schedulebot/.env
 
 .idea/
 schedulebot/__pycache__/
+
+service_account.json
+schedulebot/googledrive/service_account.json
+schedulebot/googledrive/service_account.json
