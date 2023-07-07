@@ -2,7 +2,6 @@ import logging
 
 from aiogram import Bot, Dispatcher, executor
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from schedulebot import handlers, database, middlewares, filters
 from schedulebot.config import TELEGRAM_TOKEN, BASE_DIR, LOG_CONFIG
