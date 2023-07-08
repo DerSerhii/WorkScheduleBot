@@ -1,67 +1,72 @@
 """
-The module actions:
-Defines functions for the interaction of the Telegram bot
+The module represents functions for the interaction of the bot
 with the data of the working Google folder using the Google APIs.
 """
 
-import logging
 import asyncio
-from typing import Callable, Optional, Union, List, Dict
+from typing import Callable, List, Dict
 
-from aiogoogle import Aiogoogle
+from aiogoogle import Aiogoogle, GoogleAPI
 
 from schedulebot.googledrive.credentials import CREDS
 
 
-def only_id_and_name(func_doc_files) -> Callable:
+def separate_id_and_name_in_doc_files(func) -> Callable:
     """
-    Separates `id` and `name` from among file data.
+    Decorator for :func:`separate_document_files.<locals>.get_list_doc_files`.
 
-    :return: If success, a list of dicts containing the Document file data
-             with parameters `id` and `name`.
+    :return: Decorated function.
     """
-    async def wrapper() -> Optional[List[Dict]]:
-        doc_files = await func_doc_files()
+    async def get_list_id_name_doc_files() -> List[Dict]:
+        """
+        Retrieves a list of Document files with `id` and `name` metadata from Google folder.
+
+        :return: A list of dicts containing `id` and `name` Document file metadata,
+            or an empty list if there are none.
+        :rtype: :obj:`typing.List[typing.Dict]`.
+        """
+        doc_files = await func()
         return [{'id': item['id'], 'name': item['name']} for item in doc_files]
-    return wrapper
+    return get_list_id_name_doc_files
 
 
-def only_document(func_list_files) -> Callable:
+def separate_document_files(func) -> Callable:
     """
-    Decorator for func get_list_files().
+    Decorator for :func:`get_list_files`.
 
-    Looks for Document files.
-    (from the results of get_list_files() separates files with the extension `.document`).
-
-    :return: If success, a list of dicts containing the Document file data.
+    :return: Decorated function.
     """
-    async def wrapper() -> Union[List[Dict], List[None]]:
-        list_files = await func_list_files()
-        file_document = list(filter(lambda x: x['mimeType'].split('.')[-1] == 'document',
-                                    list_files))
-        return file_document if file_document else []
-    return wrapper
+    async def get_list_doc_files() -> List[Dict]:
+        """
+        Retrieves a list of Document files with their metadata from Google folder.
+
+        :return: A list of dicts containing Document file metadata, or an empty list if there are none.
+        :rtype: :obj:`typing.List[typing.Dict]`
+        """
+        lst_files: List[Dict] = await func()
+        return list(filter(lambda x: x['mimeType'].split('.')[-1] == 'document', lst_files))
+    return get_list_doc_files
 
 
-@only_id_and_name
-@only_document
-async def get_list_files() -> Union[List[Dict], List[None]]:
+@separate_id_and_name_in_doc_files
+@separate_document_files
+async def get_list_files() -> List[Dict]:
     """
-    Getting a list of Google folder's files with their data.
+    Retrieves a list of files with their metadata from Google folder.
 
-    :return: If the folder is not empty, a list of dicts containing the file data.
+    :return: A list of dicts containing file metadata, or an empty list if there are none.
+    :rtype: :obj:`typing.List[typing.Dict]`
     """
     async with Aiogoogle(service_account_creds=CREDS) as aiogoogle:
-        drive = await aiogoogle.discover('drive', 'v3')
-        response: dict = await aiogoogle.as_service_account(
-            drive.files.list(),
-        )
-        lst_files = response.get('files')
-        return lst_files if lst_files else []
+        drive: GoogleAPI = await aiogoogle.discover('drive', 'v3')
+        response: dict = await aiogoogle.as_service_account(drive.files.list())
+        return response.get('files', [])
 
 
 if __name__ == "__main__":
     import pprint
-    pp = pprint.PrettyPrinter(indent=3)
+    # Use it to check if the Google API is working.
+    # If you need to see a list of all files or all metadata, comment out decorators.
     files = asyncio.run(get_list_files())
+    pp = pprint.PrettyPrinter(indent=3)
     pp.pprint(files)
